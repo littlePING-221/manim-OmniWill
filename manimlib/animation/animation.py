@@ -7,6 +7,7 @@ from manimlib.mobject.mobject import Mobject
 from manimlib.utils.rate_functions import smooth
 from manimlib.utils.rate_functions import squish_rate_func
 from manimlib.utils.simple_functions import clip
+from manimlib.constants import SKIP_ANIMATIOM
 
 from typing import TYPE_CHECKING
 
@@ -132,8 +133,9 @@ class Animation(object):
         run_time: float | None = None,
         rate_func: Callable[[float], float] | None = None,
         lag_ratio: float | None = None,
+        skip = SKIP_ANIMATIOM
     ):
-        self.run_time = run_time or self.run_time
+        self.run_time = 0.1 if skip else (run_time or self.run_time)
         self.rate_func = rate_func or self.rate_func
         self.lag_ratio = lag_ratio or self.lag_ratio
         return self

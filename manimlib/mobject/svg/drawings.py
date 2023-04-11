@@ -43,6 +43,7 @@ from manimlib.mobject.geometry import Dot
 from manimlib.mobject.geometry import Line
 from manimlib.mobject.geometry import Polygon
 from manimlib.mobject.geometry import Rectangle
+from manimlib.mobject.geometry import RoundedRectangle
 from manimlib.mobject.geometry import Square
 from manimlib.mobject.mobject import Mobject
 from manimlib.mobject.numbers import Integer
@@ -50,6 +51,8 @@ from manimlib.mobject.svg.svg_mobject import SVGMobject
 from manimlib.mobject.svg.tex_mobject import Tex
 from manimlib.mobject.svg.tex_mobject import TexText
 from manimlib.mobject.svg.special_tex import TexTextFromPresetString
+from manimlib.mobject.svg.text_mobject import Text
+from manimlib.mobject.svg.text_mobject import Code
 from manimlib.mobject.three_dimensions import Prismify
 from manimlib.mobject.three_dimensions import VCube
 from manimlib.mobject.types.vectorized_mobject import VGroup
@@ -624,3 +627,105 @@ class DieFace(VGroup):
         super().__init__(square, arrangement)
         self.value = value
         self.index = value
+
+class Key(VMobject):
+    def __init__(s, text, width=1, **kwargs):
+        super().__init__(**kwargs)
+        s.box = RoundedRectangle(width=width*0.5, height=0.5, corner_radius=0.1, stroke_width=2)
+        s.add(s.box)
+        if isinstance(text, str):
+            if len(text) > 1:
+                s.t1 = Text(text, font_size=12)
+            else:
+                s.t1 = Text(text, font_size=24)
+            s.add(s.t1)
+        else:
+            s.t1 = Text(text[0], font_size=20)
+            s.t2 = Text(text[1], font_size=20)
+            s.t1.move_to((0,-0.1,0))
+            s.t2.move_to((0, 0.1,0))
+            # s.t1.next_to(s.box, direction=DOWN, buff=-0.2)
+            # s.t2.next_to(s.box, direction=UP, buff=-0.2)
+            s.add(s.t1)
+            s.add(s.t2)
+
+class Keyboard(VGroup):
+    def __init__(s, **kwargs):
+        super().__init__(**kwargs)
+        # r1
+        s.r1 = VGroup()
+        for i in ['Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'PrtSc', 'Del']:
+            s.r1.add(Key(i))
+        s.r1.arrange(buff=0.1)
+        s.add(s.r1)
+        # r2
+        s.r2 = VGroup()
+        s.r2.add(Key(('`','~')))
+        s.num_keys = VGroup()
+        for i in zip('1234567890', '!@#$%^&*()'):
+            s.num_keys.add(Key(i))
+        s.num_keys.arrange(buff=0.1)
+        s.r2.add(s.num_keys)
+        s.r2.add(Key(('-','_')))
+        s.r2.add(Key(('=','+')))
+        s.r2.add(Key('BackSpace', width=2.2))
+        s.r2.arrange(buff=0.1)
+        s.add(s.r2)
+        # r3
+        s.r3 = VGroup()
+        s.r3.add(Key('Tab', width=1.7))
+        for i in 'QWERTYUIOP':
+            s.r3.add(Key(i))
+        for i in [('[', '{'), (']', '}')]:
+            s.r3.add(Key(i))
+        s.r3.add(Key(('\\','|'), width=1.5))
+        s.r3.arrange(buff=0.1)
+        s.add(s.r3)
+        # r4
+        s.r4 = VGroup()
+        s.r4.add(Key('Caps Lock', width=2.1))
+        for i in 'ASDFGHJKL':
+            s.r4.add(Key(i))
+        for i in [(';', ':'), ("'", '"')]:
+            s.r4.add(Key(i))
+        s.r4.add(Key('Enter', width=2.3))
+        s.r4.arrange(buff=0.1)
+        s.add(s.r4)
+        # r5
+        s.r5 = VGroup()
+        s.r5.add(Key('⇧Shift', width=2.8))
+        for i in 'ZXCVBNM':
+            s.r5.add(Key(i))
+        for i in [(',', '<'), ('.', '>'), ('/', '?')]:
+            s.r5.add(Key(i))
+        s.r5.add(Key('⇧Shift', width=2.8))
+        s.r5.arrange(buff=0.1)
+        s.add(s.r5)
+        # r5
+        s.r5 = VGroup()
+        s.r5.add(Key('Ctrl', width=1.3))
+        s.r5.add(Key('Win', width=1.3))
+        s.r5.add(Key('Alt', width=1.3))
+        s.r5.add(Key('', width=7.3))
+        s.r5.add(Key('Alt', width=1.3))
+        s.r5.add(Key('Fn', width=1.3))
+        s.r5.add(Key('≣', width=1.3))
+        s.r5.add(Key('Ctrl', width=1.3))
+        s.r5.arrange(buff=0.1)
+        s.add(s.r5)
+        # arrange
+        s.arrange(DOWN, buff=0.1)
+
+class CodeWithBox(VGroup):
+    def __init__(s, code_str, title_str='', language="pycon",**kwargs):
+        super().__init__(**kwargs)
+        s.code = Code(code_str, font_size=36, lsh=0, language=language)
+        s.add(s.code)
+        w = s.code.get_width()
+        h = s.code.get_height()
+        s.box = RoundedRectangle(w+0.3, h+0.3, 0.1)
+        if len(title_str) > 0:
+            s.title = Text(title_str, font_size=24)
+            s.title.next_to(s.box, UP, 0.2, UP+LEFT)
+            s.box.add(s.title)
+        s.add(s.box)

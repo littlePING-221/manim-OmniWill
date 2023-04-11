@@ -27,9 +27,10 @@ LARGE_BUFF: float = 1
 DEFAULT_MOBJECT_TO_EDGE_BUFFER: float = MED_LARGE_BUFF
 DEFAULT_MOBJECT_TO_MOBJECT_BUFFER: float = MED_SMALL_BUFF
 
+SKIP_ANIMATIOM = False
 
 # In seconds
-DEFAULT_WAIT_TIME: float = 1.0
+DEFAULT_WAIT_TIME: float = 0 if SKIP_ANIMATIOM else 0.5
 
 
 ORIGIN: Vect3 = np.array([0., 0., 0.])
@@ -174,3 +175,5 @@ PURPLE: ManimColor = PURPLE_C
 GREY: ManimColor = GREY_C
 
 COLORMAP_3B1B: List[ManimColor] = [BLUE_E, GREEN, YELLOW, RED]
+
+TEX_USE_CTEX = True # Support Chinese

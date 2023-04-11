@@ -46,6 +46,9 @@ ctex:
     \usepackage{xcolor}
     \usepackage{microtype}
     \linespread{1}
+    \usepackage{fontspec}
+    \setmainfont{WenQuanYi Micro Hei}
+    \usepackage{array}
 
 # Simplified TeX templates
 
