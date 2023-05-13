@@ -415,6 +415,7 @@ class Scene(object):
         """
         self.remove(*new_mobjects)
         self.mobjects += new_mobjects
+        self.mobjects.sort(key=Mobject.get_z_index)
         self.id_to_mobject_map.update({
             id(sm): sm
             for m in new_mobjects

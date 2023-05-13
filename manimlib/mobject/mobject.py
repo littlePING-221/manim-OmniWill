@@ -83,6 +83,7 @@ class Mobject(object):
         # If true, the mobject will not get rotated according to camera position
         is_fixed_in_frame: bool = False,
         depth_test: bool = False,
+        z_index: int = 0,
     ):
         self.color = color
         self.opacity = opacity
@@ -90,6 +91,7 @@ class Mobject(object):
         self.texture_paths = texture_paths
         self._is_fixed_in_frame = is_fixed_in_frame
         self.depth_test = depth_test
+        self.z_index = z_index
 
         # Internal state
         self.submobjects: list[Mobject] = []
@@ -1464,6 +1466,12 @@ class Mobject(object):
         return self
 
     # Getters
+    @staticmethod
+    def get_z_index(m: Mobject):
+        """
+        Used by Scene.add, see scene.py for details.
+        """
+        return m.z_index
 
     def get_bounding_box_point(self, direction: Vect3) -> Vect3:
         bb = self.get_bounding_box()
