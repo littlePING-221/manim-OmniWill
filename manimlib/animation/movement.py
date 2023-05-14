@@ -113,5 +113,5 @@ class MoveAlongPath(Animation):
         super().__init__(mobject, suspend_mobject_updating=suspend_mobject_updating, **kwargs)
 
     def interpolate_mobject(self, alpha: float) -> None:
-        point = self.path.point_from_proportion(alpha)
+        point = self.path.point_from_proportion(self.rate_func(alpha))
         self.mobject.move_to(point)
